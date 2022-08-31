@@ -11,17 +11,17 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
 
 @TestMethodOrder(OrderAnnotation.class)
-class MemberControllerTest {
+class MemberServiceTest {
 
-    private MemberController memberController;
+    private MemberService memberService;
 
     @Mock
-    private MemberService memberService;
+    private MemberRepository memberRepository;
 
     @BeforeEach
     public void initTest() throws Exception {
         MockitoAnnotations.openMocks(this);
-        memberController = new MemberController(memberService);
+        memberService = new MemberService(memberRepository);
     }
 
     @AfterEach
@@ -34,14 +34,20 @@ class MemberControllerTest {
     public void shouldReturnMemberJoinSuccess() throws Exception {
         // given
         Member member = new Member();
-        member.setId(1L);
+
+        //
+        given(memberRepository.findById(member.getId())).willReturn(null);
+
+        //
+        Member joinMember = new Member();
+        given(memberRepository.save(member)).willReturn(joinMember);
 
         //
         JSONObject join = new JSONObject();
-        given(memberService.memberJoin(member)).willReturn(join);
+        join.put(joinMember.getId(), joinMember);
 
         // when
-        JSONObject successJoin = memberController.memberJoin(member);
+        JSONObject successJoin = memberService.memberJoin(member);
 
         // then
         assertThat(successJoin, is(join));
@@ -55,14 +61,18 @@ class MemberControllerTest {
         Member member = new Member();
 
         //
+        Member findMember = new Member();
+        given(memberRepository.findById(member.getId())).willReturn(findMember);
+
+        //
         JSONObject join = new JSONObject();
-        join.put("error", "ID is null");
+        join.put("error", "ID already registered");
 
         // when
-        JSONObject failedJoin = memberController.memberJoin(member);
+        JSONObject successJoin = memberService.memberJoin(member);
 
         // then
-        assertThat(failedJoin, is(join));
+        assertThat(successJoin, is(join));
 
     }
 
