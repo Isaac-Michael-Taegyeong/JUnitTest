@@ -20,7 +20,7 @@ public class MemberController {
 
         if (member.getId() == null) {
 
-            join.put("id", "id_is_null");
+            join.put("error", "ID is null");
             return join;
         }
 
@@ -34,8 +34,8 @@ public class MemberController {
 
         JSONObject find = new JSONObject();
 
-        if (member.getName().equals("exception")) {
-            find.put("name", member.getName());
+        if (member.getId() == null) {
+            find.put("error", "ID is null");
         }
 
         find = memberService.memberFind(member);

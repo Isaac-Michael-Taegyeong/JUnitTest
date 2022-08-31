@@ -30,11 +30,12 @@ class MemberControllerTest {
 
     @Test
     @Order(1)
-    public void 회원가입성공() throws Exception {
+    public void 회원가입_성공() throws Exception {
         // given
         Member member = new Member();
         member.setId(1L);
 
+        //
         JSONObject join = new JSONObject();
         given(memberService.memberJoin(member)).willReturn(join);
 
@@ -47,11 +48,13 @@ class MemberControllerTest {
 
     @Test
     @Order(2)
-    public void 회원가입실패() throws Exception {
+    public void 회원가입_실패() throws Exception {
         // given
         Member member = new Member();
+
+        //
         JSONObject join = new JSONObject();
-        join.put("id", "id_is_null");
+        join.put("error", "ID is null");
 
         // when
         JSONObject joinMember = memberController.memberJoin(member);

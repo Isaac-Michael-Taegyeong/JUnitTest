@@ -19,7 +19,7 @@ public class MemberService {
         Member findMember = memberRepository.findById(member.getId());
         if (findMember != null) {
 
-            join.put("error", "Id_already_registered");
+            join.put("error", "ID already registered");
             return join;
         }
 
@@ -36,7 +36,7 @@ public class MemberService {
         Member findMember = memberRepository.findById(member.getId());
         if (findMember == null) {
 
-            find.put("error", "member_not_found");
+            find.put("error", "member not found");
             return find;
         }
 
