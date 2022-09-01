@@ -69,10 +69,53 @@ class MemberServiceTest {
         join.put("error", "ID already registered");
 
         // when
-        JSONObject successJoin = memberService.memberJoin(member);
+        JSONObject failedJoin = memberService.memberJoin(member);
 
         // then
-        assertThat(successJoin, is(join));
+        assertThat(failedJoin, is(join));
+
+    }
+
+    @Test
+    @Order(3)
+    public void shouldReturnMemberFindSuccess() throws Exception {
+        // given
+        Member member = new Member();
+
+        //
+        Member findMember = new Member();
+        given(memberRepository.findById(member.getId())).willReturn(findMember);
+
+        //
+        JSONObject find = new JSONObject();
+        find.put(findMember.getId(), findMember);
+
+        // when
+        JSONObject successFind = memberService.memberFind(member);
+
+        // then
+        assertThat(successFind, is(find));
+
+    }
+
+    @Test
+    @Order(4)
+    public void shouldReturnMemberFindFailed() throws Exception {
+        // given
+        Member member = new Member();
+
+        //
+        given(memberRepository.findById(member.getId())).willReturn(null);
+
+        //
+        JSONObject find = new JSONObject();
+        find.put("error", "member not found");
+
+        // when
+        JSONObject failedFind = memberService.memberFind(member);
+
+        // then
+        assertThat(failedFind, is(find));
 
     }
 

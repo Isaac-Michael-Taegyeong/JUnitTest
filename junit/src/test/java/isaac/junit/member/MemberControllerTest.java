@@ -66,4 +66,41 @@ class MemberControllerTest {
 
     }
 
+    @Test
+    @Order(3)
+    public void shouldReturnMemberFindSuccess() throws Exception {
+        // given
+        Member member = new Member();
+        member.setId(1L);
+
+        //
+        JSONObject find = new JSONObject();
+        given(memberService.memberFind(member)).willReturn(find);
+
+        // when
+        JSONObject successFind = memberController.memberFind(member);
+
+        // then
+        assertThat(successFind, is(find));
+
+    }
+
+    @Test
+    @Order(4)
+    public void shouldReturnMemberFindFailed() throws Exception {
+        // given
+        Member member = new Member();
+
+        //
+        JSONObject find = new JSONObject();
+        find.put("error", "ID is null");
+
+        // when
+        JSONObject failedFind = memberController.memberJoin(member);
+
+        // then
+        assertThat(failedFind, is(find));
+
+    }
+
 }
